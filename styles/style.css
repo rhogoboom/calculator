@@ -11,6 +11,12 @@
 .screen {
     height: 20%;
     border: solid black;
+    display: flex;
+    box-sizing: border-box;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 16px;
+    font-size: 32px;
 }
 
 .lower-half {
