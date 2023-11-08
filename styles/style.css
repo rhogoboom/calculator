@@ -54,6 +54,7 @@
     flex: 1;
 }
 
+
 .operation-div {
     box-sizing: border-box;
     width: 50%;
@@ -61,10 +62,11 @@
     padding: 8px;
 }
 
+
 .operation {
     flex: 1;
 }
 
-#operate {
+#operate-div {
     flex: 1;
 }

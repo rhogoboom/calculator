@@ -8,14 +8,16 @@ const MAXDIGITS = 20;
 
 const display = document.querySelector('.screen') 
 const digitButtons = [...document.querySelectorAll('button.digit')]
-const operationButtons = [...document.querySelectorAll('button.operation')].filter(btn => btn.id !== 'operate' && btn.id !== 'clear');
+const operationButtons = [...document.querySelectorAll('button.operation')].filter(btn => btn.id !== 'operate' && btn.id !== 'clear' && btn.id !== 'backspace');
 const operateButton = document.querySelector('#operate');
 const clearButton = document.querySelector('#clear');
+const backspaceButton = document.querySelector('#backspace');
 
 digitButtons.forEach(btn => btn.addEventListener('click', addDigitToDisplay));
 operationButtons.forEach(btn => btn.addEventListener('click', handleOperationClick));
 operateButton.addEventListener('click', handleOperateClick);
 clearButton.addEventListener('click', handleClearClick);
+backspaceButton.addEventListener('click', handleBackspace);
 
 const operators = {
     add: function add (x, y) {
@@ -116,4 +118,17 @@ function doOperation() {
     secondNumber = null;
     updateDisplayValue(result);
     renderDisplay();
+}
+
+function handleBackspace() {
+    let val = getCurrentDisplayValue();
+    if (!isBlank(val) && firstClick === false) {
+        let newVal = val.slice(0, val.length - 1);
+        updateDisplayValue(newVal)
+        renderDisplay();
+    }
+}
+
+function isBlank(str) {
+    return str.length === 0;
 }
