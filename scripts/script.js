@@ -3,6 +3,7 @@ let secondNumber = null;
 let operator = null;
 let displayValue = null;
 let firstClick = true;
+const MAXDIGITS = 20;
 
 
 const display = document.querySelector('.screen') 
@@ -41,9 +42,10 @@ function addDigitToDisplay(e) {
         updateDisplayValue('');
         renderDisplay();
     }
+
     const thisDigit = e.target.textContent;
     const currentDisplayValue = getCurrentDisplayValue();
-    if (!((thisDigit === "0" && currentDisplayValue === '') || (checkDecimal(currentDisplayValue) && checkDecimal(thisDigit)))) {
+    if (!((thisDigit === "0" && currentDisplayValue === '') || (checkDecimal(currentDisplayValue) && checkDecimal(thisDigit))) && currentDisplayValue.length < MAXDIGITS) {
         if (checkDecimal(thisDigit) && currentDisplayValue === '') {
             updateDisplayValue('0' + currentDisplayValue + thisDigit);
         } else {
@@ -108,7 +110,7 @@ function handleClearClick() {
 
 function doOperation() {
     secondNumber = parseFloat(getCurrentDisplayValue());
-    let result = operate(operator, firstNumber, secondNumber);
+    let result = Math.round(operate(operator, firstNumber, secondNumber) * 100000) / 100000;
     firstNumber = result;
     operator = null;
     secondNumber = null;
