@@ -18,6 +18,7 @@ operationButtons.forEach(btn => btn.addEventListener('click', handleOperationCli
 operateButton.addEventListener('click', handleOperateClick);
 clearButton.addEventListener('click', handleClearClick);
 backspaceButton.addEventListener('click', handleBackspace);
+window.addEventListener('keydown', handleKeydown);
 
 const operators = {
     add: function add (x, y) {
@@ -44,8 +45,13 @@ function addDigitToDisplay(e) {
         updateDisplayValue('');
         renderDisplay();
     }
-
-    const thisDigit = e.target.textContent;
+    let thisDigit;
+    if (e.type === 'click') {
+        thisDigit = e.target.textContent
+    }
+    if (e.type === 'keydown') {
+        thisDigit = e.key
+    }
     const currentDisplayValue = getCurrentDisplayValue();
     if (!((thisDigit === "0" && ((currentDisplayValue === '0' || currentDisplayValue === '') && operator === null)) || (checkDecimal(currentDisplayValue) && checkDecimal(thisDigit))) && currentDisplayValue.length < MAXDIGITS) {
         if (checkDecimal(thisDigit) && currentDisplayValue === '') {
@@ -86,7 +92,15 @@ function handleOperationClick(e) {
         doOperation();
     } else {
         firstNumber = parseFloat(getCurrentDisplayValue());
-        operator = operators[e.target.id];
+        if (e.type === 'click') {
+            operator = operators[e.target.id];
+        }
+        if (e.type === 'keydown') {8*8
+            console.log(e.type);
+            console.log(e.key)
+            operator = operators[operatorkeyPresses[e.key]]
+            console.log(operator);
+        }
 
     }
     
@@ -94,7 +108,7 @@ function handleOperationClick(e) {
     firstClick = true;
 }
 
-function handleOperateClick(e) {
+function handleOperateClick() {
     if (firstNumber !== null && operator !== null) {
         doOperation();
     }
@@ -142,4 +156,46 @@ function handleBackspace() {
 
 function isBlank(str) {
     return str.length === 0;
+}
+
+let numkeyPresses = {
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 4,
+    5: 5,
+    6: 6,
+    7: 7,
+    8: 8,
+    9: 9,
+    0: 0,
+}
+
+let operatorkeyPresses = {
+    '+': 'add',
+    '-': 'subtract',
+    '*': 'multiply',
+    '/': 'divide',
+
+}
+
+function handleKeydown (e)  {
+    if (!e.repeat) {
+        if (e.key in numkeyPresses) {
+            addDigitToDisplay(e);;
+        }
+        if (e.key in operatorkeyPresses) {
+            handleOperationClick(e);
+        }45
+        if (e.key === 'Backspace') {
+            handleBackspace();
+        }
+        if (e.key === 'Escape') {
+            handleClearClick();
+        }
+        if (e.key === 'Enter') {
+            handleOperateClick();
+        }
+    }
+
 }
