@@ -8,7 +8,7 @@ const MAXDIGITS = 20;
 
 const display = document.querySelector('.screen') 
 const digitButtons = [...document.querySelectorAll('button.digit')]
-const operationButtons = [...document.querySelectorAll('button.operation')].filter(btn => btn.id !== 'operate' && btn.id !== 'clear' && btn.id !== 'backspace');
+const operationButtons = [...document.querySelectorAll('button.operation')];
 const operateButton = document.querySelector('#operate');
 const clearButton = document.querySelector('#clear');
 const backspaceButton = document.querySelector('#backspace');
@@ -47,7 +47,7 @@ function addDigitToDisplay(e) {
 
     const thisDigit = e.target.textContent;
     const currentDisplayValue = getCurrentDisplayValue();
-    if (!((thisDigit === "0" && currentDisplayValue === '') || (checkDecimal(currentDisplayValue) && checkDecimal(thisDigit))) && currentDisplayValue.length < MAXDIGITS) {
+    if (!((thisDigit === "0" && ((currentDisplayValue === '0' || currentDisplayValue === '') && operator === null)) || (checkDecimal(currentDisplayValue) && checkDecimal(thisDigit))) && currentDisplayValue.length < MAXDIGITS) {
         if (checkDecimal(thisDigit) && currentDisplayValue === '') {
             updateDisplayValue('0' + currentDisplayValue + thisDigit);
         } else {
@@ -75,7 +75,7 @@ function renderDisplay() {
 
 function getCurrentDisplayValue() {
     if(displayValue === null) {
-        updateDisplayValue('');
+        updateDisplayValue('0');
     }
     return displayValue;
     
@@ -105,19 +105,30 @@ function handleClearClick() {
     firstNumber = null;
     secondNumber = null;
     operator = null;
-    displayValue = null;
+    displayValue = '';
     renderDisplay();
 
 }
 
 function doOperation() {
     secondNumber = parseFloat(getCurrentDisplayValue());
-    let result = Math.round(operate(operator, firstNumber, secondNumber) * 100000) / 100000;
-    firstNumber = result;
+    if (secondNumber === 0 && operator === operators['divide']) {
+        updateDisplayValue('You fool!');
+        renderDisplay();
+        firstNumber = null
+        firstClick = true;
+        displayValue = null;
+
+    } else {
+        let result = Math.round(operate(operator, firstNumber, secondNumber) * (10 ** MAXDIGITS)) / (10 ** MAXDIGITS);
+        firstNumber = result;
+        updateDisplayValue(result);
+    renderDisplay();
+    }
+    
     operator = null;
     secondNumber = null;
-    updateDisplayValue(result);
-    renderDisplay();
+    
 }
 
 function handleBackspace() {
