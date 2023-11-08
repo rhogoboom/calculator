@@ -43,12 +43,21 @@ function addDigitToDisplay(e) {
     }
     const thisDigit = e.target.textContent;
     const currentDisplayValue = getCurrentDisplayValue();
-    if (!(thisDigit === "0" && currentDisplayValue === '')) {
-        updateDisplayValue(currentDisplayValue + thisDigit);
-        renderDisplay(displayValue);
+    if (!((thisDigit === "0" && currentDisplayValue === '') || (checkDecimal(currentDisplayValue) && checkDecimal(thisDigit)))) {
+        if (checkDecimal(thisDigit) && currentDisplayValue === '') {
+            updateDisplayValue('0' + currentDisplayValue + thisDigit);
+        } else {
+            updateDisplayValue(currentDisplayValue + thisDigit);
+        }
+        
+        renderDisplay();
         firstClick = false;
     }
     
+}
+
+function checkDecimal(str) {
+    return str.includes('.');
 }
 
 function updateDisplayValue(newValue) {
